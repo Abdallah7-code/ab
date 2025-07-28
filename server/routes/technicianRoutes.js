@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Technician = require('../models/Technician');
-const { authorize } = require('../middlewares/authorize');
+const authorize = require('../middlewares/authorize');
 const asyncHandler = require('../middlewares/asyncHandler');
 const AppError = require('../utils/appError');
 
