@@ -26,6 +26,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 // Routes - تأكد من أن الملفات التالية تُصدر Router صحيح
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/technicians', require('./routes/technicianRoutes'));
+app.use('/api/admin', require('./routes/adminRoutes'));
 
 // Route للاختبار
 app.get('/', (req, res) => {
