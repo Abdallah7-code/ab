@@ -12,8 +12,9 @@ mongoose.connect(process.env.MONGODB_URI, {
 .then(async () => {
   console.log('✅ Connected to MongoDB');
 
-  const email = 'admin@example.com'; // غيّر الإيميل إذا أردت
-  const password = '123456'; // غيّر الباسورد لأمان أعلى
+  const email = 'admin1@example.com';
+   const password = 'Test@2025';
+
 
   // تحقق هل يوجد مسؤول بنفس البريد
   const existingAdmin = await Admin.findOne({ email });
