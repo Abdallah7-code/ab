@@ -1,42 +1,39 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const Admin = require('./models/Admin');
- // تأكد من أن هذا المسار صحيح ويؤدي إلى موديل المسؤول
+const Admin = require('./models/Admin'); // تأكد من صحة المسار
 
 // الاتصال بقاعدة البيانات
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(async () => {
-  console.log('✅ Connected to MongoDB');
+mongoose.connect(process.env.MONGODB_URI)
+  .then(async () => {
+    console.log('✅ Connected to MongoDB');
 
-  const email = 'admin1@example.com';
-   const password = 'Test@2025';
+    const email = 'admin1@example.com';
+    const password = 'Test@2025';
 
+    // حذف المسؤول إذا كان موجودًا مسبقًا
+    const existingAdmin = await Admin.findOne({ email });
+    if (existingAdmin) {
+      await Admin.deleteOne({ email });
+      console.log('🗑️ Existing admin deleted');
+    }
 
-  // تحقق هل يوجد مسؤول بنفس البريد
-  const existingAdmin = await Admin.findOne({ email });
-  if (existingAdmin) {
-    console.log('⚠️ Admin already exists');
+    // إنشاء كلمة مرور مشفّرة
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    // إنشاء مسؤول جديد
+    const admin = new Admin({
+      name: 'مدير النظام',
+      email,
+      password: hashedPassword,
+      role: 'admin',
+    });
+
+    await admin.save();
+    console.log('✅ Admin created successfully');
     process.exit();
-  }
-
-  // إنشاء مسؤول جديد
-  const hashedPassword = await bcrypt.hash(password, 12);
-  const admin = new Admin({
-    name: 'مدير النظام',
-    email,
-    password: hashedPassword,
-    role: 'admin',
+  })
+  .catch((err) => {
+    console.error('❌ Error:', err);
+    process.exit(1);
   });
-
-  await admin.save();
-  console.log('✅ Admin created successfully');
-  process.exit();
-})
-.catch((err) => {
-  console.error('❌ Error:', err);
-  process.exit(1);
-});
