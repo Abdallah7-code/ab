@@ -33,8 +33,8 @@ userSchema.pre('save', async function (next) {
 });
 
 // ✅ دالة للمقارنة بين كلمة المرور المدخلة والمحفوظة
-userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
-  return await bcrypt.compare(candidatePassword, userPassword);
+adminSchema.methods.correctPassword = async function (candidatePassword) {
+  return await bcrypt.compare(candidatePassword, this.password);
 };
 
 module.exports = mongoose.model('User', userSchema);
