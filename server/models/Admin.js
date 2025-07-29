@@ -1,8 +1,7 @@
-// server/models/Admin.js
-
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
+// تعريف الـ Schema
 const adminSchema = new mongoose.Schema({
   email: {
     type: String,
@@ -25,11 +24,9 @@ adminSchema.pre('save', async function (next) {
   next();
 });
 
-// مقارنة كلمة المرور المدخلة مع المشفرة
+// مقارنة كلمة المرور
 adminSchema.methods.correctPassword = async function (candidatePassword, adminPassword) {
   return await bcrypt.compare(candidatePassword, adminPassword);
 };
 
-const Admin = mongoose.model('Admin', adminSchema);
-
-module.exports = Admin;
+module.exports = mongoose.model('Admin', adminSchema);
