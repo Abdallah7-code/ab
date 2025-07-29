@@ -25,8 +25,9 @@ adminSchema.pre('save', async function (next) {
 });
 
 // مقارنة كلمة المرور
-adminSchema.methods.correctPassword = async function (candidatePassword, adminPassword) {
-  return await bcrypt.compare(candidatePassword, adminPassword);
+adminSchema.methods.correctPassword = async function (candidatePassword) {
+  return await bcrypt.compare(candidatePassword, this.password);
 };
+
 
 module.exports = mongoose.model('Admin', adminSchema);
