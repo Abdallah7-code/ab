@@ -25,6 +25,7 @@ adminSchema.pre('save', async function (next) {
 });
 
 // مقارنة كلمة المرور
+// ✅ الكود الصحيح في Admin.js
 adminSchema.methods.correctPassword = async function (candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };
