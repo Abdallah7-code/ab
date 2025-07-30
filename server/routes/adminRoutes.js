@@ -1,8 +1,9 @@
 const express = require('express');
-const { adminLogin } = require('../controllers/adminController');
+const { getStats } = require('../controllers/adminController');
+const { protectAdmin } = require('../middleware/adminMiddleware');
 
 const router = express.Router();
 
-router.post('/login', adminLogin); // POST /api/admin/login
+router.get('/stats', protectAdmin, getStats);
 
 module.exports = router;
