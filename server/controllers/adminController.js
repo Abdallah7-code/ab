@@ -34,6 +34,14 @@ const adminLogin = async (req, res, next) => {
   });
 };
 
+const getStats = async (req, res) => {
+  res.status(200).json({
+    users: 100,
+    technicians: 50,
+    services: 30
+  });
+};
+
 module.exports = {
   adminLogin,
   getStats
