@@ -19,9 +19,9 @@ const userSchema = new mongoose.Schema({
     select: false // لإخفاء كلمة المرور عند جلب المستخدم
   },
   role: {
-    type: String,
-    enum: ['admin', 'customer'],
-    default: 'customer'
+  type: String,
+  enum: ['admin', 'customer', 'technician'], // أضف الأدوار هنا
+  default: 'customer'
   }
 });
 
