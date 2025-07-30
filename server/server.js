@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const statsRoutes = require('./routes/statsRoutes');
 
 
 // إنشاء تطبيق Express
@@ -27,6 +28,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/technicians', require('./routes/technicianRoutes'));
 app.use('/api/admin', require('./routes/adminRoutes'));
+app.use(statsRoutes);
 
 // Route للاختبار
 app.get('/', (req, res) => {
