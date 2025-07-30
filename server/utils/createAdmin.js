@@ -1,7 +1,7 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const Admin = require('./models/Admin'); // تأكد من صحة المسار
+const Admin = require('../models/Admin'); // تأكد من صحة المسار
 
 // الاتصال بقاعدة البيانات
 mongoose.connect(process.env.MONGODB_URI)

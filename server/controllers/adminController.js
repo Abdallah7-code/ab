@@ -1,39 +1,39 @@
-require('dotenv').config();
-const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const Admin = require('./models/Admin'); // تأكد من صحة المسار
+const jwt = require('jsonwebtoken');
+const Admin = require('../models/Admin');
+const AppError = require('../utils/appError');
 
-// الاتصال بقاعدة البيانات
-mongoose.connect(process.env.MONGODB_URI)
-  .then(async () => {
-    console.log('✅ Connected to MongoDB');
+const adminLogin = async (req, res, next) => {
+  const { email, password } = req.body;
 
-    const email = 'admin1@example.com';
-    const password = 'Test@2025';
+  const admin = await Admin.findOne({ email });
+  if (!admin) {
+    return next(new AppError('البريد الإلكتروني غير صحيح', 401));
+  }
 
-    // حذف المسؤول إذا كان موجودًا مسبقًا
-    const existingAdmin = await Admin.findOne({ email });
-    if (existingAdmin) {
-      await Admin.deleteOne({ email });
-      console.log('🗑️ Existing admin deleted');
+  // ✅ المقارنة الصحيحة
+  const isMatch = await bcrypt.compare(password, admin.password);
+  if (!isMatch) {
+    return next(new AppError('كلمة المرور غير صحيحة', 401));
+  }
+
+  const token = jwt.sign(
+    { id: admin._id, role: admin.role },
+    process.env.JWT_SECRET,
+    { expiresIn: '90d' }
+  );
+
+  res.status(200).json({
+    success: true,
+    token,
+    data: {
+      id: admin._id,
+      email: admin.email,
+      role: admin.role
     }
-
-    // إنشاء كلمة مرور مشفّرة
-    const hashedPassword = await bcrypt.hash(password, 12);
-
-    // إنشاء مسؤول جديد
-    const admin = new Admin({
-      name: 'مدير النظام',
-      email,
-      password: hashedPassword,
-      role: 'admin',
-    });
-
-    await admin.save();
-    console.log('✅ Admin created successfully');
-    process.exit();
-  })
-  .catch((err) => {
-    console.error('❌ Error:', err);
-    process.exit(1);
   });
+};
+
+module.exports = {
+  adminLogin
+};
