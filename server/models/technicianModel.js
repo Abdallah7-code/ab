@@ -5,7 +5,7 @@ const technicianSchema = new mongoose.Schema({
   phone: String,
   email: String,
   department: String,
-  ratings: [Number]
+  ratings: [Number],
 }, { timestamps: true });
 
-module.exports = mongoose.model('Technician', technicianSchema);
+module.exports = mongoose.models.Technician || mongoose.model('Technician', technicianSchema);
